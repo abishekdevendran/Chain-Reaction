@@ -9,11 +9,12 @@ import (
 
 	// Import our new db package and other dependencies
 	db "github.com/abishekdevendran/Chain-Reaction/backend/db/sqlc"
-	auth_service "github.com/abishekdevendran/Chain-Reaction/backend/internal/auth"
 	pb "github.com/abishekdevendran/Chain-Reaction/backend/gen/go/user"
+	auth_service "github.com/abishekdevendran/Chain-Reaction/backend/internal/auth"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/joho/godotenv"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
 )
 
 func main() {
@@ -45,13 +46,12 @@ func main() {
 	}
 
 	s := grpc.NewServer()
-
-	// IMPORTANT: Inject the database store into our auth server
 	authServer := &auth_service.Server{
 		Store: store,
 	}
-
+	
 	pb.RegisterAuthServiceServer(s, authServer)
+	reflection.Register(s)
 	log.Printf("gRPC server listening on %s", port)
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("Failed to serve gRPC: %v", err)
