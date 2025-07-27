@@ -1,0 +1,15 @@
+version: "2"
+sql:
+  - engine: "postgresql"
+    # The path to our schema migration files
+    schema: "db/migration"
+    # The path to our SQL query files (we'll create this next)
+    queries: "db/query"
+    gen:
+      go:
+        # The path where the generated Go code should be placed
+        out: "db/sqlc"
+        # The package name for the generated code
+        package: "db"
+        sql_package: "pgx/v5"
+        emit_interface: true

@@ -4,6 +4,7 @@ import (
 	"context"
 	"log"
 
+	db "github.com/abishekdevendran/Chain-Reaction/backend/db/sqlc"
 	pb "github.com/abishekdevendran/Chain-Reaction/backend/gen/go/user"
 )
 
@@ -13,6 +14,7 @@ import (
 // .proto file later, our server will still compile.
 type Server struct {
 	pb.UnimplementedAuthServiceServer
+	Store db.Querier
 }
 
 // Register implements the Register RPC method.
