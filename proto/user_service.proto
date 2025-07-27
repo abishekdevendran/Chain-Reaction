@@ -1,0 +1,68 @@
+// Use proto3 syntax. This should always be the first non-empty, non-comment line.
+syntax = "proto3";
+
+// Define the package name. This acts as a namespace to prevent naming conflicts.
+package user;
+
+// Go-specific option. Remember to use your GitHub username.
+option go_package = "./gen/go/user";
+
+// ====== MESSAGES ======
+// Messages are the data structures. They are like structs or classes.
+
+// Represents a user in our system.
+message User {
+  string id = 1;         // Unique identifier (we'll use a UUID)
+  string username = 2;
+  int64 created_at = 3;  // Unix timestamp
+}
+
+// ====== SERVICE DEFINITIONS ======
+// A service defines a set of RPC (Remote Procedure Call) methods.
+
+service AuthService {
+  // Method to register a new user. It returns tokens to immediately log the user in.
+  rpc Register(RegisterRequest) returns (AuthResponse);
+
+  // Method to log in an existing user.
+  rpc Login(LoginRequest) returns (AuthResponse);
+
+  // Method to get a new access token using a refresh token.
+  rpc RefreshAccessToken(RefreshAccessTokenRequest) returns (RefreshAccessTokenResponse);
+
+  // Future method for logging out (would add the refresh token to a blocklist).
+  // rpc Logout(LogoutRequest) returns (LogoutResponse);
+}
+
+
+// ====== RPC REQUEST/RESPONSE MESSAGES ======
+
+// Request for registering a new user.
+message RegisterRequest {
+  string username = 1;
+  string password = 2;
+}
+
+// Request for logging in.
+message LoginRequest {
+  string username = 1;
+  string password = 2;
+}
+
+// A generic response for both Register and Login, as they now do the same thing:
+// create an authenticated session.
+message AuthResponse {
+  User user = 1;
+  string access_token = 2;
+  string refresh_token = 3;
+}
+
+// Request to get a new access token.
+message RefreshAccessTokenRequest {
+  string refresh_token = 1;
+}
+
+// Response containing the new access token.
+message RefreshAccessTokenResponse {
+  string access_token = 1;
+}

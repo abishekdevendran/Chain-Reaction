@@ -16,6 +16,7 @@ A real-time, multiplayer web-based implementation of the classic strategy game C
   - [Project Roadmap](#project-roadmap)
   - [Getting Started](#getting-started)
   - [License](#license)
+  - [Reference](#reference)
 
 ## About The Game
 
@@ -68,3 +69,10 @@ This project is a monorepo containing two main components:
 ## License
 
 Distributed under the MIT License. See `LICENSE` for more information.
+
+## Reference
+
+```protoc --proto_path=proto \                                                                                                                                                               ─╯
+    --go_out=./backend \
+    --go-grpc_out=./backend \
+    proto/user_service.proto```
